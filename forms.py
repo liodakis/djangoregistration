@@ -43,7 +43,7 @@ class RegistrationForm(forms.Form):
                                 label=_("Password (again)"))
     
     def clean_email(self):
-        if self.cleaned_data["email"].find("@stanford.edu") == -1:
+        if self.cleaned_data["email"].find(".stanford.edu") == -1 and self.cleaned_data["email"].find("@stanford.edu") == -1:
             raise forms.ValidationError(_("Only Stanford Passwords Allowed."))
         else:
             return self.cleaned_data["email"]

@@ -10,6 +10,8 @@ from django.db import transaction
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
+from company.models import Profile
+
 try:
     from django.utils.timezone import now as datetime_now
 except ImportError:
@@ -78,9 +80,11 @@ class RegistrationManager(models.Manager):
         new_user = User.objects.create_user(username, email, password)
         new_user.is_active = False
         new_user.save()
-
+        
         registration_profile = self.create_profile(new_user)
-
+        
+        profile, profile_created = Profile.objects.get_or_create(user=new_user)
+        
         if send_email:
             registration_profile.send_activation_email(site)
 
